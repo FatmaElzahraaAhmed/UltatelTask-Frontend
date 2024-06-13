@@ -1,0 +1,217 @@
+<div class="container-fluid">
+  <div class="row justify-content-center h-100 flex-column align-items-center">
+    <div class="col-md-2 text-center p-4">
+      <img src="assets/logo.svg" alt="logo" width="100%" />
+    </div>
+    <div class="col-md-4 row justify-content-center" *ngIf="register">
+      <div class="card py-5 px-3 col-md-10">
+        <div class="text-center">
+          <h4 class="card-title">Register</h4>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
+            <div class="mb-3 py-2">
+              <label for="name" class="form-label">Full Name</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                formControlName="name"
+                required
+                placeholder="Full Name"
+              />
+              <div
+                *ngIf="
+                  registerForm.get('name')?.invalid &&
+                  registerForm.get('name')?.touched
+                "
+                class="text-danger"
+              >
+                Full Name is required
+              </div>
+            </div>
+            <div class="mb-3 py-2">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                required
+                placeholder="Email"
+              />
+              <div
+                *ngIf="
+                  registerForm.get('email')?.invalid &&
+                  registerForm.get('email')?.touched
+                "
+                class="text-danger"
+              >
+                Valid email is required
+              </div>
+              <div *ngIf="emailTaken" class="text-danger">
+                Email is already taken,
+                <a href="" class="sm-login-btn login-btn">Login instead</a>
+              </div>
+            </div>
+            <div class="mb-3 py-2">
+              <label for="password" class="form-label">Password</label>
+              <div class="password-container">
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="password"
+                  required
+                  placeholder="Password"
+                  (input)="checkPasswordStrength()"
+                />
+                <span
+                  class="toggle-password position-absolute"
+                  (click)="togglePasswordVisibility()"
+                >
+                  <i
+                    [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                  ></i>
+                </span>
+              </div>
+              <div
+                class="alert"
+                [ngClass]="passwordStrength.class"
+                *ngIf="registerForm.get('password')?.value"
+              >
+                <div class="alert-title">
+                  <p
+                    *ngIf="passwordStrength.class === 'very-weak'"
+                    class="py-1"
+                  >
+                    Very Weak
+                  </p>
+                  <p *ngIf="passwordStrength.class === 'weak'" class="py-1">
+                    Weak
+                  </p>
+                  <p *ngIf="passwordStrength.class === 'medium'" class="py-1">
+                    Medium
+                  </p>
+                  <p *ngIf="passwordStrength.class === 'strong'" class="py-1">
+                    Strong
+                  </p>
+                </div>
+                <div class="alert-message">
+                  Password must be at least
+                  <span
+                    [ngClass]="{
+                      'text-success': passwordStrength.lengthValid
+                    }"
+                    >8 characters</span
+                  >
+                  and contain
+                  <span
+                    [ngClass]="{ 'text-success': passwordStrength.hasNumber }"
+                    >1 number</span
+                  >,
+                  <span
+                    [ngClass]="{
+                      'text-success': passwordStrength.hasUpperCase
+                    }"
+                    >1 uppercase letter</span
+                  >,
+                  <span
+                    [ngClass]="{
+                      'text-success': passwordStrength.hasLowerCase
+                    }"
+                    >1 lowercase letter</span
+                  >, and
+                  <span
+                    [ngClass]="{ 'text-success': passwordStrength.hasSymbol }"
+                    >1 symbol</span
+                  >.
+                </div>
+              </div>
+              <div
+                *ngIf="
+                  registerForm.get('password')?.invalid &&
+                  registerForm.get('password')?.touched
+                "
+                class="text-danger"
+              >
+                Password is required
+              </div>
+            </div>
+            <div class="mb-3 py-2">
+              <label for="confirmPassword" class="form-label"
+                >Confirm Password</label
+              >
+              <div class="password-container">
+                <input
+                  id="confirmPassword"
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  required
+                  placeholder="Confirm Password"
+                />
+                <span
+                  class="toggle-password position-absolute"
+                  (click)="toggleConfirmPasswordVisibility()"
+                >
+                  <i
+                    [ngClass]="
+                      showConfirmPassword ? 'fa fa-eye' : 'fa fa-eye-slash'
+                    "
+                  ></i>
+                </span>
+              </div>
+              <div
+                *ngIf="
+                  registerForm
+                    .get('confirmPassword')
+                    ?.hasError('passwordMismatch') &&
+                  registerForm.get('confirmPassword')?.touched
+                "
+                class="text-danger"
+              >
+                Passwords do not match.
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              Register
+            </button>
+            <div class="w-100 text-center pt-4">
+              <a href="" class="login-btn">Login</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 row justify-content-center" *ngIf="emailConfirmation">
+      <div
+        class="card py-5 px-3 d-flex flex-column justify-content-center align-items-center"
+      >
+        <div class="image w-25 mx-auto">
+          <img src="assets/email.png" width="100%" alt="" />
+        </div>
+        <h1 class="my-3">Email Confirmation</h1>
+        <p class="w-75 text-center confirm-text">
+          We have sent email to
+          <span *ngIf="registerForm.value.email" class="user-email">{{
+            registerForm.value.email
+          }}</span>
+          to confirm the validity of our email address. After receiving the
+          email follow the link provided to complete your registration.
+        </p>
+        <p class="confirm-text">
+          Confirmed? <a href="" class="confirm-login-btn">Login now!</a>
+        </p>
+        <div class="border w-75 my-3 mx-auto"></div>
+          <p class="confirm-text d-flex justify-content-center align-items-baseline">
+            Didn't receive any mail?
+            <button class="resend-btn btn p-0 m-0 ps-1" (click)="resendConfirmationEmail()">
+              Resend Confirmation Email
+            </button>
+          </p>
+          <p *ngIf="emailResent" class="email-resent-text">Email is resent successfully!</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+.container-fluid {
+  background-color: #f6f5fa;
+  min-height: 100vh;
+  /* max-height: 110vh; */
+  padding-bottom: 40px;
+}
+
+h4,
+label,
+input::placeholder {
+  color: #878787;
+}
+
+label {
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #1e6ac3;
+  border-radius: 10px;
+  font-size: 17px;
+}
+
+.login-btn {
+  color: #1e6ac3;
+  font-size: 20px;
+  font-weight: 500;
+}
+.sm-login-btn {
+  font-size: 15px;
+}
+
+.alert {
+  padding: 6px;
+  margin-top: 10px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.alert::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent currentColor transparent;
+}
+
+.very-weak .alert-title {
+  background-color: #f8d7da;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #721c24;
+}
+
+.weak .alert-title {
+  background-color: #fdd1b3;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #853504;
+}
+
+.medium .alert-title {
+  background-color: #ffeeba;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #9c661f;
+}
+
+.strong .alert-title {
+  background-color: #d4edda;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #155724;
+}
+
+.very-weak::before {
+  color: rgb(255, 66, 66);
+}
+
+.weak::before {
+  color: #ff5a07;
+}
+
+.medium::before {
+  color: #ffc107;
+}
+
+.strong::before {
+  color: green;
+}
+
+.very-weak {
+  border: 2px solid rgb(255, 66, 66);
+  position: relative;
+  padding-top: 10px;
+}
+
+.weak {
+  border: 2px solid #ff5a07;
+  position: relative;
+  padding-top: 10px;
+}
+
+.medium {
+  border: 2px solid #ffc107;
+  position: relative;
+  padding-top: 10px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.strong {
+  border: 2px solid green;
+  position: relative;
+  padding-top: 10px;
+}
+
+.alert-message {
+  font-size: 14px;
+  color: #878787;
+}
+
+.text-success {
+  font-weight: 500;
+}
+
+.toggle-password {
+  top: 50%;
+  right: 10px;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.toggle-password i {
+  color: #878787;
+}
+
+h1{
+  color: #009fe3;
+}
+
+.confirm-text{
+  color: #878787;
+}
+.user-email,.email-resent-text{
+  font-weight: 500;
+  color: #009fe3;
+}
+
+.confirm-login-btn,.resend-btn{
+  color: #009fe3;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.border{
+  height: 1px;
+  color: #878787;
+}
