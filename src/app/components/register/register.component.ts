@@ -7,11 +7,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -19,7 +20,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   showPassword: boolean = false;
   emailToken = '';
-  emailResent=false;
+  emailResent = false;
   register = true;
   emailConfirmation = false;
   emailTaken = false;
@@ -109,7 +110,7 @@ export class RegisterComponent {
       this.authService.register(user).subscribe(
         (response) => {
           console.log(response);
-          
+
           if (
             response.message ==
             'Registration successful. Please check your email to confirm your account.'
@@ -137,7 +138,7 @@ export class RegisterComponent {
     this.authService.resendConfirmationEmail(email).subscribe(
       (response) => {
         console.log(response);
-        this.emailResent = true; 
+        this.emailResent = true;
       },
       (error) => {
         console.error(error);

@@ -1,0 +1,115 @@
+<div class="modal-header f-flex justify-content-between">
+  <h6 class="modal-title">{{ modalTitle }}</h6>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    class="btn btn-light"
+    (click)="closeModal()"
+  >
+    <i class="fa fa-close"></i>
+  </button>
+</div>
+<div class="modal-body w-50">
+  <form>
+    <div class="form-group mb-4">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="student.name"
+        name="name"
+        id="name"
+      />
+      <div
+        *ngIf="
+          studentForm.get('name')?.invalid && studentForm.get('name')?.touched
+        "
+        class="text-danger"
+      >
+        Name is required.
+      </div>
+    </div>
+    <div class="form-group my-4">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        [(ngModel)]="student.email"
+        name="email"
+        id="email"
+      />
+      <div
+        *ngIf="
+          (studentForm.get('email')?.hasError('required') ||
+            studentForm.get('email')?.hasError('email')) &&
+          studentForm.get('email')?.touched
+        "
+        class="text-danger"
+      >
+        Valid email is required.
+      </div>
+    </div>
+    <div class="form-group my-4">
+      <label for="gender">Gender</label>
+      <ng-select
+        [items]="genders"
+        bindLabel="name"
+        bindValue="name"
+        [(ngModel)]="student.gender"
+        name="gender"
+        id="gender"
+        (clear)="clearGender()"
+      >
+      </ng-select>
+      <div *ngIf="studentForm.get('gender')?.invalid && studentForm.get('gender')?.touched" class="text-danger">Gender is required.</div>
+    </div>
+    <div class="form-group my-4">
+      <label for="country">Country</label>
+      <ng-select
+        [items]="countries"
+        bindLabel="name"
+        bindValue="name"
+        [(ngModel)]="student.country"
+        name="country"
+        id="country"
+        (clear)="clearCountry()"
+      >
+      </ng-select>
+      <div *ngIf="studentForm.get('country')?.invalid && studentForm.get('country')?.touched" class="text-danger">Country is required.</div>
+
+    </div>
+    <div class="form-group border-1">
+      <label for="birthdate">Birthdate</label>
+      <form class="row row-cols-sm-auto">
+        <div class="col-12">
+          <div class="input-group calendar">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              [(ngModel)]="student.dateOfBirth"
+              ngbDatepicker
+              #d="ngbDatepicker"
+              [maxDate]="{ year: 2010, month: 12, day: 31 }"
+              [minDate]="{ year: 2000, month: 1, day: 1 }"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              (click)="d.toggle()"
+              type="button"
+            >
+              <i class="fa fa-calendar"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </form>
+  <div *ngIf="studentForm.get('birthdate')?.invalid && studentForm.get('birthdate')?.touched" class="text-danger">Birthdate is required.</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-success px-5" (click)="save()">
+    Save
+  </button>
+</div>

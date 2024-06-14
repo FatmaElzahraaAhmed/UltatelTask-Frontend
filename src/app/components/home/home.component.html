@@ -1,0 +1,174 @@
+<div class="container-fluid p-5 pt-3">
+    <div class="header row justify-content-between align-items-baseline">
+      <div class="image col-2">
+        <img src="assets/logo.svg" class="img-fluid" alt="" />
+      </div>
+      <button class="btn btn-danger col-1" (click)="logout()">Logout</button>
+    </div>
+    <div class="filter mt-5">
+      <div class="filter-header d-flex justify-content-between align-items-baseline">
+        <h4>Students</h4>
+        <button class="btn btn-success" (click)="openAddEditModal(true)">
+          <i class="fa fa-add"></i> Add New
+        </button>
+      </div>
+      <div class="filter-content row justify-content-between mt-4">
+        <div class="col-2">
+          <div class="flex-column justify-content-center align-items-start">
+            <label for="name" class="p-0 m-0 form-label my-2">Name</label>
+            <input type="text" class="col-3 form-control" [(ngModel)]="selectedName" />
+          </div>
+          <div class="my-3">
+            <label for="country" class="p-0 m-0 form-label my-2">Country</label>
+            <ng-select
+              [items]="countries"
+              bindLabel="name"
+              bindValue="name"
+              [(ngModel)]="selectedCountry"
+              (clear)="searchStudents()"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="flex-column justify-content-center align-items-start">
+            <label for="age" class="p-0 m-0 form-label my-2">Age</label>
+            <div class="age-input p-0 m-0 d-flex align-items-center">
+              <input type="number" class="form-control" [(ngModel)]="selectedMinAge" />
+              <a class="mx-2 text-decoration-none">to</a>
+              <input type="number" class="form-control" [(ngModel)]="selectedMaxAge" />
+            </div>
+          </div>
+          <div class="my-3">
+            <label for="gender" class="p-0 m-0 form-label my-2">Gender</label>
+            <ng-select
+              [items]="genders"
+              bindLabel="name"
+              bindValue="name"
+              [(ngModel)]="selectedGender"
+              (clear)="searchStudents()"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-4 align-self-end row justify-content-evenly">
+          <button class="btn btn-primary col-6" (click)="searchStudents()">Search</button>
+          <button class="btn btn-outline-dark col-4" (click)="resetFilters()">Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="table mt-5">
+      <div class="pre-table row justify-content-between align-items-baseline">
+        <div class="left col-3 row">
+          <p class="col-4">Show entries:</p>
+          <ng-select
+            [items]="entries"
+            bindLabel="name"
+            bindValue="name"
+            [(ngModel)]="pageSize"
+            (change)="onEntriesChange()"
+            (clear)="onEntriesClear()"
+            class="col-4"
+          >
+          </ng-select>
+        </div>
+        <div class="right col-4 d-flex justify-content-end align-items-center">
+            <button class="btn mx-3" [class.disabled]="currentPage === 1"  (click)="goToFirstPage()">First</button>
+            <button class="btn mx-3" [class.disabled]="currentPage === 1" (click)="goToPreviousPage()">Previous</button>
+            <button *ngFor="let page of pagesArray()" class="btn mx-3" [class.num-btn-selected]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
+            <button class="btn mx-3" [class.disabled]="currentPage === totalPages" (click)="goToNextPage()">Next</button>
+            <button class="btn mx-3" [class.disabled]="currentPage === totalPages" (click)="goToLastPage()">Last</button>            
+        </div>
+      </div>
+      
+      <div class="table-content">
+        <table class="table">
+          <thead>
+            <tr class="table-light">
+              <th scope="col-1"></th>
+              <th scope="col-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  Student Name
+                  <button class="btn p-0 m-0" (click)="sortTable('name')">
+                    <i class="fa-solid fa-sort"></i>
+                  </button>
+                </div>
+              </th>
+              <th scope="col-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  Age
+                  <button class="btn p-0 m-0" (click)="sortTable('age')">
+                    <i class="fa-solid fa-sort"></i>
+                  </button>
+                </div>
+              </th>
+              <th scope="col-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  Gender
+                  <button class="btn p-0 m-0" (click)="sortTable('gender')">
+                    <i class="fa-solid fa-sort"></i>
+                  </button>
+                </div>
+              </th>
+              <th scope="col-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  Email
+                  <button class="btn p-0 m-0" (click)="sortTable('email')">
+                    <i class="fa-solid fa-sort"></i>
+                  </button>
+                </div>
+              </th>
+              <th scope="col-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  Country
+                  <button class="btn p-0 m-0" (click)="sortTable('country')">
+                    <i class="fa-solid fa-sort"></i>
+                  </button>
+                </div>
+              </th>
+              <th scope="col-1"></th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            <tr *ngFor="let student of paginatedStudents; let i = index" [ngClass]="{'table-light': i % 2 != 0}">
+              <td>
+                <button class="fa-regular fa-pen-to-square btn table-btn" (click)="openAddEditModal(false,student)"></button>
+              </td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.age }}</td>
+              <td>{{ student.gender }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.country }}</td>
+              <td>
+                <button class="fa-solid fa-trash-can btn table-btn" (click)="confirmDelete(student)"></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="filteredStudents.length === 0" class="alert alert-light text-center mt-3" role="alert">
+            No students available.
+          </div>
+      </div>
+      <div class="post-table">
+        <div class="pre-table row justify-content-between align-items-baseline">
+          <div class="left col-3 row">
+            <p>
+                Showing <span>{{ (currentPage - 1) * pageSize + 1 }}</span>
+                to
+                <span>{{ getMaxIndexDisplayed() }}</span>
+                of <span>{{ filteredStudents.length }}</span> entries
+              </p>
+          </div>
+          <div class="right col-4 d-flex justify-content-end align-items-center">
+            <button class="btn mx-3" [class.disabled]="currentPage === 1"  (click)="goToFirstPage()">First</button>
+            <button class="btn mx-3" [class.disabled]="currentPage === 1" (click)="goToPreviousPage()">Previous</button>
+            <button *ngFor="let page of pagesArray()" class="btn mx-3" [class.num-btn-selected]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
+            <button class="btn mx-3" [class.disabled]="currentPage === totalPages" (click)="goToNextPage()">Next</button>
+            <button class="btn mx-3" [class.disabled]="currentPage === totalPages" (click)="goToLastPage()">Last</button>            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

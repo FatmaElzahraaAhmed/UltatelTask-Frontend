@@ -1,0 +1,45 @@
+.container-fluid {
+  background-color: #f6f5fa;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+h4,
+label,
+input::placeholder {
+  color: #878787;
+}
+
+label {
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #1e6ac3;
+  border-radius: 10px;
+  font-size: 17px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.register-btn {
+  color: #1e6ac3;
+  font-size: 20px;
+  font-weight: 500;
+}
+.sm-register-btn {
+  font-size: 15px;
+}
+
+.toggle-password {
+  top: 50%;
+  right: 10px;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.toggle-password i {
+  color: #878787;
+}

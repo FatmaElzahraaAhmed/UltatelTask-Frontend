@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <div class="row justify-content-center h-100 flex-column align-items-center">
-    <div class="col-md-2 text-center p-4">
+    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-8 text-center p-4">
       <img src="assets/logo.svg" alt="logo" width="100%" />
     </div>
-    <div class="col-md-4 row justify-content-center" *ngIf="register">
+    <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center" *ngIf="register">
       <div class="card py-5 px-3 col-md-10">
         <div class="text-center">
           <h4 class="card-title">Register</h4>
@@ -51,7 +51,7 @@
               </div>
               <div *ngIf="emailTaken" class="text-danger">
                 Email is already taken,
-                <a href="" class="sm-login-btn login-btn">Login instead</a>
+                <a routerLink="/login" class="sm-login-btn login-btn">Login instead</a>
               </div>
             </div>
             <div class="mb-3 py-2">
@@ -178,7 +178,7 @@
               Register
             </button>
             <div class="w-100 text-center pt-4">
-              <a href="" class="login-btn">Login</a>
+              <a routerLink="/login" class="login-btn">Login</a>
             </div>
           </form>
         </div>
@@ -201,7 +201,7 @@
           email follow the link provided to complete your registration.
         </p>
         <p class="confirm-text">
-          Confirmed? <a href="" class="confirm-login-btn">Login now!</a>
+          Confirmed? <a routerLink="/login" class="confirm-login-btn">Login now!</a>
         </p>
         <div class="border w-75 my-3 mx-auto"></div>
           <p class="confirm-text d-flex justify-content-center align-items-baseline">

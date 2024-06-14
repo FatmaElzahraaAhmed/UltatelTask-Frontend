@@ -1,0 +1,86 @@
+.btn-danger {
+  height: 40px;
+}
+
+.filter-header h4 {
+  color: #878787;
+}
+
+.filter-header .btn-success {
+  padding: 5px 20px 5px 20px;
+}
+
+.filter-content {
+  padding: 30px;
+  border: 1px solid #c8c8c8ad;
+  border-radius: 10px;
+  color: #878787;
+}
+a {
+  color: #878787;
+}
+
+.btn-primary {
+  background-color: #1e6ac3;
+  border-color: #87878784;
+  border-radius: 10px;
+}
+
+.btn-outline-dark {
+  border-radius: 10px;
+  color: #717171;
+  border-color: #727272;
+  background-color: #f6f5fa;
+}
+
+::ng-deep .ng-select .ng-select-container {
+  border-color: #ced4daad;
+}
+
+.right .btn {
+  padding: 0;
+  height: fit-content;
+  color: #1e6ac3;
+}
+
+.right .num-btn-selected {
+  padding: 5px 12px 5px 12px;
+  border-radius: 100px;
+  background-color: #1e6ac3;
+  color: white;
+  cursor: default;
+}
+
+.table td,
+.table th,
+.table button {
+  color: #6b6b6b;
+  font-weight: 400;
+}
+.table th {
+  font-weight: 500;
+}
+.disabled {
+  border: none;
+}
+.table-btn {
+  border: 1px solid #878787b2;
+}
+
+.btns button {
+  height: 20px;
+}
+
+.btns button i {
+  padding: 0;
+  margin: 0;
+}
+
+.pre-table p,
+.post-table p {
+  color: #6b6b6b;
+}
+
+.post-table p span {
+  font-weight: 500;
+}

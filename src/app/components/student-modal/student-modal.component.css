@@ -1,0 +1,12 @@
+.btn-outline-secondary{
+    border-color: transparent;
+}
+
+.calendar{
+    border: 1px solid #87878771;
+    border-radius: 7px;
+}
+
+.calendar input{
+    border: none;
+}

@@ -1,0 +1,88 @@
+<div class="container-fluid">
+  <div class="row justify-content-center h-100 flex-column align-items-center">
+    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-8 text-center p-4">
+      <img src="assets/logo.svg" alt="logo" width="100%" />
+    </div>
+    <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center mt-lg-5 mt-2">
+      <div class="card py-5 px-3 col-md-10">
+        <div class="text-center">
+          <h4 class="card-title">Welcome</h4>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+            <div class="mb-3 py-2">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                required
+                placeholder="Email"
+              />
+              <div
+                *ngIf="
+                  loginForm.get('email')?.invalid &&
+                  loginForm.get('email')?.touched
+                "
+                class="text-danger"
+              >
+                Valid email is required
+              </div>
+              <div class="text-danger">
+                {{ emailErrorMessage }}
+                <a
+                  *ngIf="showAnchorTag"
+                  routerLink="/register"
+                  class="sm-register-btn register-btn"
+                  >,Register instead?</a
+                >
+              </div>
+            </div>
+            <div class="mb-3 py-2">
+              <label for="password" class="form-label">Password</label>
+              <div class="password-container">
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  formControlName="password"
+                  required
+                  placeholder="Password"
+                />
+                <span
+                  class="toggle-password position-absolute"
+                  (click)="togglePasswordVisibility()"
+                >
+                  <i
+                    [ngClass]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                  ></i>
+                </span>
+              </div>
+
+              <div class="text-danger">
+                {{ passwordErrorMessage }}
+              </div>
+              <div
+                *ngIf="
+                  loginForm.get('password')?.invalid &&
+                  loginForm.get('password')?.touched
+                "
+                class="text-danger"
+              >
+                Password is required
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              Login
+            </button>
+            <div class="w-100 text-center pt-4">
+              <a routerLink="/register" class="register-btn">Register</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
