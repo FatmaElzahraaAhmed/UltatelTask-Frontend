@@ -1,0 +1,33 @@
+<div class="container-fluid">
+  <div class="row justify-content-center h-100 flex-column align-items-center">
+    <div
+      class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-8 text-center p-4"
+    >
+      <img src="assets/logo.svg" alt="logo" width="100%" />
+    </div>
+    <div class="col-xxl-6 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 text-center row justify-content-center" >
+      <div
+        class="card py-5 px-3 d-flex flex-column justify-content-center align-items-center" *ngIf="confirmed"
+      >
+        <div class="image w-25 mx-auto">
+          <img src="assets/email.png" width="100%" alt="" />
+        </div>
+        <h1 class="my-3">Email Confirmed!</h1>
+
+        <p class="confirm-text">
+          Your email is confirmed successfully
+          <a routerLink="/login" class="confirm-login-btn">Login now!</a>
+        </p>
+      </div>
+      <div
+        class="card py-5 px-3 d-flex flex-column justify-content-center align-items-center" *ngIf="!confirmed"
+      >
+        <div class="image w-25 mx-auto">
+          <img src="assets/email.png" width="100%" alt="" />
+        </div>
+        <h3 class="my-3 text-danger">Error confirming your email</h3>
+
+      </div>
+    </div>
+  </div>
+</div>

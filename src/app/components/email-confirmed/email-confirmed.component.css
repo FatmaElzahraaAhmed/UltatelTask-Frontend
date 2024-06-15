@@ -1,0 +1,20 @@
+.container-fluid {
+  background-color: #f6f5fa;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+h1 {
+  color: #009fe3;
+}
+
+.confirm-text {
+  color: #878787;
+}
+
+.confirm-login-btn {
+  color: #009fe3;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: underline;
+}

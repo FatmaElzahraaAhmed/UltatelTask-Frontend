@@ -184,7 +184,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6 row justify-content-center" *ngIf="emailConfirmation">
+    <div class="col-xxl-6 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center" *ngIf="emailConfirmation">
       <div
         class="card py-5 px-3 d-flex flex-column justify-content-center align-items-center"
       >
@@ -204,7 +204,7 @@
           Confirmed? <a routerLink="/login" class="confirm-login-btn">Login now!</a>
         </p>
         <div class="border w-75 my-3 mx-auto"></div>
-          <p class="confirm-text d-flex justify-content-center align-items-baseline">
+          <p class="confirm-text d-md-flex text-center justify-content-center align-items-baseline">
             Didn't receive any mail?
             <button class="resend-btn btn p-0 m-0 ps-1" (click)="resendConfirmationEmail()">
               Resend Confirmation Email

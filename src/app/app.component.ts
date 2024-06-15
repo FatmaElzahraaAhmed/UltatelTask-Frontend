@@ -6,7 +6,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { StudentService } from './services/student.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @Component({

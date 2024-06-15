@@ -49,6 +49,7 @@ a {
   background-color: #1e6ac3;
   color: white;
   cursor: default;
+  display: block !important;
 }
 
 .table td,
@@ -84,3 +85,16 @@ a {
 .post-table p span {
   font-weight: 500;
 }
+
+
+
+
+@media (max-width: 576px) {
+  .btn-danger{
+    background-color: transparent;
+    border: none;
+    color: #dc3545;
+    font-weight: 500;
+  }
+}
+

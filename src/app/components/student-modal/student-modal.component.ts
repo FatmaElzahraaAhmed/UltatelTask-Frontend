@@ -8,6 +8,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StudentService } from '../../services/student.service';
 import Swal from 'sweetalert2';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-student-modal',
@@ -28,6 +29,8 @@ import Swal from 'sweetalert2';
 export class StudentModalComponent {
   @Input() modalTitle: string = '';
   @Input() student: any;
+  @Output() studentUpdated = new EventEmitter<any>();
+  @Output() studentAdded = new EventEmitter<any>();
   countries: any[] = [];
   isEditMode: boolean = false;
   oldStudent: any;
@@ -40,6 +43,21 @@ export class StudentModalComponent {
     { id: 1, name: 'Male' },
     { id: 2, name: 'Female' },
   ];
+
+  constructor(
+    public activeModal: NgbActiveModal,
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private studentService: StudentService
+  ) {
+    this.studentForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      gender: ['', Validators.required],
+      country: ['', Validators.required],
+      dateOfBirth: [null, Validators.required],
+    });
+  }
 
   ngOnInit() {
     if (this.student.id) {
@@ -57,6 +75,7 @@ export class StudentModalComponent {
 
     this.fetchCountries();
   }
+
   fetchCountries() {
     this.http.get<any[]>('assets/countries.json').subscribe({
       next: (data) => {
@@ -88,6 +107,7 @@ export class StudentModalComponent {
       dateOfBirth: this.dateStructToString(student.dateOfBirth),
     });
   }
+
   markAllAsTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
@@ -107,21 +127,6 @@ export class StudentModalComponent {
     return date.toISOString().split('T')[0];
   }
 
-  constructor(
-    public activeModal: NgbActiveModal,
-    private http: HttpClient,
-    private fb: FormBuilder,
-    private studentService: StudentService
-  ) {
-    this.studentForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      gender: ['', Validators.required],
-      country: ['', Validators.required],
-      dateOfBirth: [null, Validators.required],
-    });
-  }
-
   closeModal() {
     this.activeModal.dismiss('Cross click');
   }
@@ -132,8 +137,6 @@ export class StudentModalComponent {
     if (this.studentForm.valid) {
       const formData = this.studentForm.value;
       if (this.isEditMode && this.student) {
-       
-
         if (this.isFormValueChanged(this.student, this.originalStudentData)) {
           this.studentService.updateStudent(this.studentId, formData).subscribe(
             (response) => {
@@ -145,6 +148,7 @@ export class StudentModalComponent {
                 confirmButtonText: 'OK',
               }).then(() => {
                 this.activeModal.close(response);
+                this.studentUpdated.emit(response);
               });
             },
             (error) => {
@@ -173,6 +177,7 @@ export class StudentModalComponent {
               confirmButtonText: 'OK',
             }).then(() => {
               this.activeModal.close(response);
+              this.studentAdded.emit(response);
             });
           },
           (error) => {
@@ -194,6 +199,7 @@ export class StudentModalComponent {
       this.markAllAsTouched(this.studentForm);
     }
   }
+
   isFormValueChanged(newData: any, originalData: any): boolean {
     return JSON.stringify(newData) !== JSON.stringify(originalData);
   }
@@ -203,6 +209,7 @@ export class StudentModalComponent {
       gender: '',
     });
   }
+
   clearCountry() {
     this.studentForm.patchValue({
       country: '',

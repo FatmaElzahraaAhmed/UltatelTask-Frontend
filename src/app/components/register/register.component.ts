@@ -45,9 +45,11 @@ export class RegisterComponent {
       { validator: this.passwordMatchValidator }
     );
   }
+
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
   toggleConfirmPasswordVisibility() {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
@@ -103,6 +105,7 @@ export class RegisterComponent {
     if (this.passwordStrength.hasSymbol) count++;
     return count;
   }
+
   onSubmit() {
     if (this.registerForm.valid) {
       const user = this.registerForm.value;

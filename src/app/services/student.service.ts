@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class StudentService {
-  private baseUrl = 'https://ultateltask-backend-production.up.railway.app/student';
+  private baseUrl =
+    'https://ultateltask-backend-production.up.railway.app/student';
 
   constructor(private http: HttpClient) {}
 
@@ -35,7 +36,9 @@ export class StudentService {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.patch<any>(`${this.baseUrl}/${studentId}`, studentData, { headers });
+    return this.http.patch<any>(`${this.baseUrl}/${studentId}`, studentData, {
+      headers,
+    });
   }
 
   deleteStudent(studentId: number): Observable<any> {
