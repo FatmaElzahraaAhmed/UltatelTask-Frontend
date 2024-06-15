@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-email-confirmed',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './email-confirmed.component.html',
   styleUrls: ['./email-confirmed.component.css'],
 })
@@ -16,24 +16,21 @@ export class EmailConfirmedComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  confirmed=true;
+  confirmed = true;
 
   ngOnInit() {
     const token = this.route.snapshot.paramMap.get('token');
     if (token) {
       this.authService.confirmEmail(token).subscribe({
         next: (data) => {
-          console.log('Email confirmed:', data);
-          this.confirmed=true;
+          this.confirmed = true;
         },
         error: (error) => {
-          console.error('Error confirming email:', error);
-          this.confirmed=false
+          this.confirmed = false;
         },
       });
     } else {
-      console.error('No token provided');
-      this.confirmed=false
+      this.confirmed = false;
     }
   }
 }

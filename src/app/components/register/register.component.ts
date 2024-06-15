@@ -112,8 +112,6 @@ export class RegisterComponent {
 
       this.authService.register(user).subscribe(
         (response) => {
-          console.log(response);
-
           if (
             response.message ==
             'Registration successful. Please check your email to confirm your account.'
@@ -140,12 +138,9 @@ export class RegisterComponent {
     const email = this.registerForm.get('email')?.value;
     this.authService.resendConfirmationEmail(email).subscribe(
       (response) => {
-        console.log(response);
         this.emailResent = true;
       },
-      (error) => {
-        console.error(error);
-      }
+      (error) => {}
     );
   }
 }

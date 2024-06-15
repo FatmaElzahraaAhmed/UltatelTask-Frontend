@@ -140,7 +140,6 @@ export class StudentModalComponent {
         if (this.isFormValueChanged(this.student, this.originalStudentData)) {
           this.studentService.updateStudent(this.studentId, formData).subscribe(
             (response) => {
-              console.log('Student updated successfully:', response);
               Swal.fire({
                 icon: 'success',
                 title: 'Student Updated',
@@ -152,7 +151,6 @@ export class StudentModalComponent {
               });
             },
             (error) => {
-              console.error('Error updating student:', error);
               if (error.error.message == 'Email is already taken') {
                 Swal.fire({
                   icon: 'error',
@@ -169,7 +167,6 @@ export class StudentModalComponent {
       } else {
         this.studentService.createStudent(formData).subscribe(
           (response) => {
-            console.log('Student created successfully:', response);
             Swal.fire({
               icon: 'success',
               title: 'Student Created',
@@ -181,7 +178,6 @@ export class StudentModalComponent {
             });
           },
           (error) => {
-            console.error('Error creating student:', error);
             if (error.error.message == 'Email is already taken') {
               Swal.fire({
                 icon: 'error',
@@ -194,8 +190,6 @@ export class StudentModalComponent {
         );
       }
     } else {
-      console.log(this.studentForm.value);
-
       this.markAllAsTouched(this.studentForm);
     }
   }

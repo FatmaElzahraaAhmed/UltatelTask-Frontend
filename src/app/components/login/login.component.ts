@@ -12,18 +12,22 @@ import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule,RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
   passwordErrorMessage = '';
-  showAnchorTag=false;
+  showAnchorTag = false;
   emailErrorMessage = '';
   loginForm: FormGroup;
   showPassword: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService,private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -46,28 +50,24 @@ export class LoginComponent {
   onSubmit() {
     this.emailErrorMessage = '';
     this.passwordErrorMessage = '';
-    this.showAnchorTag=false;
+    this.showAnchorTag = false;
     if (this.loginForm.valid) {
       const user = this.loginForm.value;
 
       this.authService.login(user).subscribe(
         (response) => {
-          console.log(response);
-          if(response.accessToken){
-            console.log('login successful');
+          if (response.accessToken) {
             localStorage.setItem('token', response.accessToken);
             this.router.navigate(['/home']);
           }
         },
         (error) => {
-          console.log(error);
-          
           if (error.error.message == 'Email not confirmed') {
             this.emailErrorMessage = 'Email not confirmed';
           } else if (error.error.message == "Email doesn't exist") {
             this.emailErrorMessage = `Email doesn't exist`;
-            this.showAnchorTag=true;
-          }else if(error.error.message =='Wrong Password'){
+            this.showAnchorTag = true;
+          } else if (error.error.message == 'Wrong Password') {
             this.passwordErrorMessage = 'Wrong Password';
           }
         }
