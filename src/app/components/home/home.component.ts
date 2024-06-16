@@ -87,7 +87,6 @@ export class HomeComponent {
     });
   }
 
-
   logout() {
     Swal.fire({
       title: 'Are you sure?',
@@ -115,8 +114,8 @@ export class HomeComponent {
     this.onEntriesChange();
   }
 
-  sortTable(column: string) {
-    if (this.sortColumn === column) {
+  sortTable(column: string, search: boolean = false) {
+    if (this.sortColumn === column && search == false) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = column;
@@ -181,7 +180,7 @@ export class HomeComponent {
     this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
     this.goToFirstPage();
 
-    this.sortTable(this.sortColumn);
+    this.sortTable(this.sortColumn, true);
   }
 
   resetFilters() {
@@ -191,7 +190,7 @@ export class HomeComponent {
     this.selectedMaxAge = null;
     this.selectedGender = null;
     this.filteredStudents = [...this.students];
-    this.sortTable(this.sortColumn);
+    this.sortTable(this.sortColumn, true);
   }
 
   get paginatedStudents(): any[] {
@@ -261,18 +260,24 @@ export class HomeComponent {
       this.addStudentToList(newStudent);
     });
 
-    this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
   }
+
   updateStudentInList(updatedStudent: any) {
-    const index = this.students.findIndex((s) => s.id === updatedStudent.id);
+    let index = this.students.findIndex((s) => s.id === updatedStudent.id);
     if (index !== -1) {
       this.students[index] = updatedStudent;
+    }
+    index = this.filteredStudents.findIndex((s) => s.id === updatedStudent.id);
+    if (index !== -1) {
+      this.filteredStudents[index] = updatedStudent;
     }
   }
 
   addStudentToList(newStudent: any) {
     this.students.push(newStudent);
+    if (this.students.length != this.filteredStudents.length) {
+      this.filteredStudents.push(newStudent);
+    }
+    this.sortTable(this.sortColumn, true);
   }
-
-
 }
