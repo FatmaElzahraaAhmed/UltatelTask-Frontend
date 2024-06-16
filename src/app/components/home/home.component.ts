@@ -115,11 +115,13 @@ export class HomeComponent {
   }
 
   sortTable(column: string, search: boolean = false) {
-    if (this.sortColumn === column && search == false) {
+    if (this.sortColumn == column && search == false) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = column;
-      this.sortDirection = 'asc';
+      if (search == false) {
+        this.sortDirection = 'asc';
+      }
     }
 
     this.filteredStudents.sort((a, b) => {
@@ -179,10 +181,10 @@ export class HomeComponent {
     });
     this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
     this.goToFirstPage();
-
+    
     this.sortTable(this.sortColumn, true);
   }
-
+  
   resetFilters() {
     this.selectedName = '';
     this.selectedCountry = null;
@@ -190,6 +192,7 @@ export class HomeComponent {
     this.selectedMaxAge = null;
     this.selectedGender = null;
     this.filteredStudents = [...this.students];
+    this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
     this.sortTable(this.sortColumn, true);
   }
 
@@ -259,7 +262,6 @@ export class HomeComponent {
     modalRef.componentInstance.studentAdded.subscribe((newStudent: any) => {
       this.addStudentToList(newStudent);
     });
-
   }
 
   updateStudentInList(updatedStudent: any) {
