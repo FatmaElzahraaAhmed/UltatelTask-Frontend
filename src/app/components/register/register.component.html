@@ -1,9 +1,14 @@
 <div class="container-fluid">
   <div class="row justify-content-center h-100 flex-column align-items-center">
-    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-8 text-center p-4">
+    <div
+      class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-8 text-center p-4"
+    >
       <img src="assets/logo.svg" alt="logo" width="100%" />
     </div>
-    <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center" *ngIf="register">
+    <div
+      class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center"
+      *ngIf="register"
+    >
       <div class="card py-5 px-3 col-md-10">
         <div class="text-center">
           <h4 class="card-title">Register</h4>
@@ -42,16 +47,30 @@
               />
               <div
                 *ngIf="
-                  registerForm.get('email')?.invalid &&
+                  registerForm.get('email')?.errors?.['required'] &&
+                  registerForm.get('email')?.touched
+                "
+                class="text-danger"
+              >
+                Email is required
+              </div>
+              <div
+                *ngIf="
+                  registerForm.get('email')?.errors?.['email'] &&
                   registerForm.get('email')?.touched
                 "
                 class="text-danger"
               >
                 Valid email is required
               </div>
+              <div class="text-danger">
+                {{ emailErrorMessage }}
+              </div>
               <div *ngIf="emailTaken" class="text-danger">
                 Email is already taken,
-                <a routerLink="/login" class="sm-login-btn login-btn">Login instead</a>
+                <a routerLink="/login" class="sm-login-btn login-btn"
+                  >Login instead</a
+                >
               </div>
             </div>
             <div class="mb-3 py-2">
@@ -184,7 +203,10 @@
         </div>
       </div>
     </div>
-    <div class="col-xxl-6 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center" *ngIf="emailConfirmation">
+    <div
+      class="col-xxl-6 col-xl-5 col-lg-6 col-md-8 col-sm-8 col-11 row justify-content-center"
+      *ngIf="emailConfirmation"
+    >
       <div
         class="card py-5 px-3 d-flex flex-column justify-content-center align-items-center"
       >
@@ -201,16 +223,24 @@
           email follow the link provided to complete your registration.
         </p>
         <p class="confirm-text">
-          Confirmed? <a routerLink="/login" class="confirm-login-btn">Login now!</a>
+          Confirmed?
+          <a routerLink="/login" class="confirm-login-btn">Login now!</a>
         </p>
         <div class="border w-75 my-3 mx-auto"></div>
-          <p class="confirm-text d-md-flex text-center justify-content-center align-items-baseline">
-            Didn't receive any mail?
-            <button class="resend-btn btn p-0 m-0 ps-1" (click)="resendConfirmationEmail()">
-              Resend Confirmation Email
-            </button>
-          </p>
-          <p *ngIf="emailResent" class="email-resent-text">Email is resent successfully!</p>
+        <p
+          class="confirm-text d-md-flex text-center justify-content-center align-items-baseline"
+        >
+          Didn't receive any mail?
+          <button
+            class="resend-btn btn p-0 m-0 ps-1"
+            (click)="resendConfirmationEmail()"
+          >
+            Resend Confirmation Email
+          </button>
+        </p>
+        <p *ngIf="emailResent" class="email-resent-text">
+          Email is resent successfully!
+        </p>
       </div>
     </div>
   </div>

@@ -8,6 +8,8 @@ import { StudentService } from '../../services/student.service';
 import Swal from 'sweetalert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StudentModalComponent } from '../student-modal/student-modal.component';
+import { catchError, map } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +30,8 @@ export class HomeComponent {
   pageSize: number = 10;
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  compareA='';
+  compareB='';
 
   selectedName: string = '';
   selectedMinAge: number | null = null;
@@ -58,33 +62,63 @@ export class HomeComponent {
   }
 
   fetchCountries() {
-    this.http.get<any[]>('assets/countries.json').subscribe({
-      next: (data) => {
-        this.countries = data;
-      },
-      error: (error) => {
-        console.error('Error loading countries:', error);
-      },
-    });
+    this.http
+      .get<any[]>('assets/countries.json')
+      .pipe(
+        catchError((error) => {
+          console.error('Error loading countries:', error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.countries = data;
+        },
+      });
+  }
+
+  fetchStudents() {
+    this.studentService
+      .getAllStudents()
+      .pipe(
+        map((data) =>
+          data.map((student) => ({
+            ...student,
+            age: this.calculateAge(student.dateOfBirth),
+          }))
+        ),
+        catchError((error) => {
+          console.error('Error fetching students:', error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.students = data;
+          this.filteredStudents = [...this.students];
+          this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
+        },
+      });
+  }
+
+  calculateAge(dateOfBirth: string): number {
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
   }
 
   pagesArray(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
-  }
-
-  fetchStudents() {
-    this.studentService.getAllStudents().subscribe({
-      next: (data) => {
-        this.students = data;
-        this.filteredStudents = data;
-        this.totalPages = Math.ceil(
-          this.filteredStudents.length / this.pageSize
-        );
-      },
-      error: (error) => {
-        console.error('Error fetching students:', error);
-      },
-    });
   }
 
   logout() {
@@ -109,7 +143,6 @@ export class HomeComponent {
   }
 
   onEntriesClear() {
-    this.selectedEntry = 10;
     this.pageSize = 10;
     this.onEntriesChange();
   }
@@ -125,19 +158,28 @@ export class HomeComponent {
     }
 
     this.filteredStudents.sort((a, b) => {
-      const compareA =
+      if (this.sortColumn === 'name') {
+        this.compareA = this.getFullName(a).toLowerCase();
+        this.compareB = this.getFullName(b).toLowerCase();
+      }else{
+      this.compareA =
         typeof a[column] === 'string' ? a[column].toLowerCase() : a[column];
-      const compareB =
+      this.compareB =
         typeof b[column] === 'string' ? b[column].toLowerCase() : b[column];
-
-      if (compareA < compareB) {
+      }
+      
+      if (this.compareA < this.compareB) {
         return this.sortDirection === 'asc' ? -1 : 1;
-      } else if (compareA > compareB) {
+      } else if (this.compareA > this.compareB) {
         return this.sortDirection === 'asc' ? 1 : -1;
       } else {
         return 0;
       }
     });
+  }
+  
+  getFullName(student: any): string {
+    return `${student.firstName} ${student.lastName}`;
   }
 
   goToPage(page: number) {
@@ -163,10 +205,17 @@ export class HomeComponent {
   }
 
   searchStudents() {
+    const nameParts = this.selectedName.trim().toLowerCase().split(' ');
+    const firstNameFilter = nameParts[0] ?? '';
+    const lastNameFilter = nameParts[1] ?? '';
+
     this.filteredStudents = this.students.filter((student) => {
-      const nameMatch = student.name
+      const firstNameMatch = student.firstName
         .toLowerCase()
-        .includes(this.selectedName?.toLowerCase() ?? '');
+        .includes(firstNameFilter);
+      const lastNameMatch = student.lastName
+        .toLowerCase()
+        .includes(lastNameFilter);
       const countryMatch = this.selectedCountry
         ? student.country === this.selectedCountry
         : true;
@@ -177,14 +226,20 @@ export class HomeComponent {
         (this.selectedMinAge ? student.age >= this.selectedMinAge : true) &&
         (this.selectedMaxAge ? student.age <= this.selectedMaxAge : true);
 
-      return nameMatch && countryMatch && genderMatch && ageMatch;
+      return (
+        firstNameMatch &&
+        lastNameMatch &&
+        countryMatch &&
+        genderMatch &&
+        ageMatch
+      );
     });
     this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
     this.goToFirstPage();
-    
+
     this.sortTable(this.sortColumn, true);
   }
-  
+
   resetFilters() {
     this.selectedName = '';
     this.selectedCountry = null;
@@ -222,8 +277,16 @@ export class HomeComponent {
   }
 
   deleteStudent(studentId: number) {
-    this.studentService.deleteStudent(studentId).subscribe(
-      () => {
+    this.studentService
+      .deleteStudent(studentId)
+      .pipe(
+        catchError((error) => {
+          Swal.fire('Error!', 'Failed to delete the student.', 'error');
+          console.error('Error deleting student:', error);
+          return throwError(() => error);
+        })
+      )
+      .subscribe(() => {
         Swal.fire('Deleted!', 'The student has been deleted.', 'success');
         this.filteredStudents = this.filteredStudents.filter(
           (s) => s.id !== studentId
@@ -232,15 +295,8 @@ export class HomeComponent {
         if (this.paginatedStudents.length === 0 && this.currentPage > 1) {
           this.currentPage--;
         }
-        this.totalPages = Math.ceil(
-          this.filteredStudents.length / this.pageSize
-        );
-      },
-      (error) => {
-        Swal.fire('Error!', 'Failed to delete the student.', 'error');
-        console.error('Error deleting student:', error);
-      }
-    );
+        this.totalPages = Math.ceil(this.filteredStudents.length / this.pageSize);
+      });
   }
 
   openAddEditModal(isAddMode: boolean, student?: any) {
@@ -265,6 +321,7 @@ export class HomeComponent {
   }
 
   updateStudentInList(updatedStudent: any) {
+    updatedStudent.age = this.calculateAge(updatedStudent.dateOfBirth);
     let index = this.students.findIndex((s) => s.id === updatedStudent.id);
     if (index !== -1) {
       this.students[index] = updatedStudent;
@@ -276,6 +333,7 @@ export class HomeComponent {
   }
 
   addStudentToList(newStudent: any) {
+    newStudent.age = this.calculateAge(newStudent.dateOfBirth);
     this.students.push(newStudent);
     if (this.students.length != this.filteredStudents.length) {
       this.filteredStudents.push(newStudent);

@@ -90,9 +90,9 @@
   <div class="table mt-5">
     <div class="pre-table row justify-content-between align-items-baseline">
       <div
-        class="left col-xl-3 col-lg-12 col-sm-6 row justify-content-lg-center justify-content-md-start justify-content-center align-items-baseline"
+        class="left col-xl-3 col-lg-12 col-md-6 col-sm-12 row justify-content-lg-center justify-content-md-start justify-content-center align-items-baseline"
       >
-        <p class="col-xl-5 col-lg-2 col-md-4 col-sm-5 col-5">Show entries:</p>
+        <p class="col-xl-5 col-lg-2 col-md-4 col-sm-3 col-5">Show entries:</p>
         <ng-select
           [items]="entries"
           bindLabel="name"
@@ -100,12 +100,12 @@
           [(ngModel)]="pageSize"
           (change)="onEntriesChange()"
           (clear)="onEntriesClear()"
-          class="col-4 col-lg-2 col-xl-4"
+          class="col-4 col-md-4 col-sm-2 col-lg-2 col-xl-4"
         >
         </ng-select>
       </div>
-      <div
-        class="right mt-xl-0 mt-5 col-xl-9 col-lg-12 col-sm-6 d-flex justify-content-xl-end justify-content-center align-items-center overflow-x-auto"
+      <div *ngIf="filteredStudents.length != 0"
+        class="right mt-xl-0 mt-5 col-xl-9 col-lg-12 col-md-6 col-sm-12 d-flex justify-content-xl-end justify-content-center align-items-center overflow-x-auto"
       >
         <button
           class="btn mx-3"
@@ -152,41 +152,56 @@
           <tr class="table-light">
             <th scope="col-2"></th>
             <th scope="col-3">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-start align-items-center">
                 Name
-                <button class="btn p-0 m-0 px-1" (click)="sortTable('name')">
+                <button
+                  class="btn p-0 m-0 px-1 ms-3"
+                  (click)="sortTable('name')"
+                >
                   <i class="fa-solid fa-sort"></i>
                 </button>
               </div>
             </th>
             <th scope="col-1">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-start align-items-center">
                 Age
-                <button class="btn p-0 m-0 px-1" (click)="sortTable('age')">
+                <button
+                  class="btn p-0 m-0 px-1 ms-3"
+                  (click)="sortTable('age')"
+                >
                   <i class="fa-solid fa-sort"></i>
                 </button>
               </div>
             </th>
             <th scope="col-2">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-start align-items-center">
                 Gender
-                <button class="btn p-0 m-0 px-1" (click)="sortTable('gender')">
+                <button
+                  class="btn p-0 m-0 px-1 ms-3"
+                  (click)="sortTable('gender')"
+                >
                   <i class="fa-solid fa-sort"></i>
                 </button>
               </div>
             </th>
             <th scope="col-3">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-start align-items-center">
                 Email
-                <button class="btn p-0 m-0 px-1" (click)="sortTable('email')">
+                <button
+                  class="btn p-0 m-0 px-1 ms-3"
+                  (click)="sortTable('email')"
+                >
                   <i class="fa-solid fa-sort"></i>
                 </button>
               </div>
             </th>
             <th scope="col-2">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-start align-items-center">
                 Country
-                <button class="btn p-0 m-0 px-1" (click)="sortTable('country')">
+                <button
+                  class="btn p-0 m-0 px-1 ms-3"
+                  (click)="sortTable('country')"
+                >
                   <i class="fa-solid fa-sort"></i>
                 </button>
               </div>
@@ -194,27 +209,94 @@
             <th scope="col-1"></th>
           </tr>
         </thead>
+        <div class="row justify-content-center d-md-none mx-5 mb-2">
+          <div class="col-sm-3 col-5 border m-2">
+            <div
+              class="d-flex justify-content-center justify-content-md-start align-items-center"
+            >
+              Name
+              <button class="btn p-0 m-0 px-1 ms-3" (click)="sortTable('name')">
+                <i class="fa-solid fa-sort"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-3 col-5 border m-2">
+            <div
+              class="d-flex justify-content-center justify-content-md-start align-items-center"
+            >
+              Age
+              <button class="btn p-0 m-0 px-1 ms-3" (click)="sortTable('age')">
+                <i class="fa-solid fa-sort"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-3 col-5 border m-2">
+            <div
+              class="d-flex justify-content-center justify-content-md-start align-items-center"
+            >
+              Gender
+              <button
+                class="btn p-0 m-0 px-1 ms-3"
+                (click)="sortTable('gender')"
+              >
+                <i class="fa-solid fa-sort"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-3 col-5 border m-2">
+            <div
+              class="d-flex justify-content-center justify-content-md-start align-items-center"
+            >
+              Email
+              <button
+                class="btn p-0 m-0 px-1 ms-3"
+                (click)="sortTable('email')"
+              >
+                <i class="fa-solid fa-sort"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-3 col-5 border m-2">
+            <div
+              class="d-flex justify-content-center justify-content-md-start align-items-center"
+            >
+              Country
+              <button
+                class="btn p-0 m-0 px-1 ms-3"
+                (click)="sortTable('country')"
+              >
+                <i class="fa-solid fa-sort"></i>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <tbody>
           <tr
             *ngFor="let student of paginatedStudents; let i = index"
             [ngClass]="{ 'table-light': i % 2 != 0 }"
           >
-            <td>
+            <td class="sh-in-lg">
               <button
                 class="fa-regular fa-pen-to-square btn table-btn"
                 (click)="openAddEditModal(false, student)"
               ></button>
             </td>
-            <td>{{ student.name }}</td>
-            <td>{{ student.age }}</td>
-            <td>{{ student.gender }}</td>
-            <td>{{ student.email }}</td>
-            <td>{{ student.country }}</td>
-            <td>
+            <td data-label="Name:   ">
+              {{ student.firstName }} {{ student.lastName }}
+            </td>
+            <td data-label="Age:   ">{{ student.age }}</td>
+            <td data-label="Gender:   ">{{ student.gender }}</td>
+            <td data-label="Email:   ">{{ student.email }}</td>
+            <td data-label="Country:   ">{{ student.country }}</td>
+            <td class="d-md-table-cell d-flex justify-content-end">
               <button
                 class="fa-solid fa-trash-can btn table-btn"
                 (click)="confirmDelete(student)"
+              ></button>
+              <button
+                class="fa-regular fa-pen-to-square btn table-btn sh-in-sm ms-2"
+                (click)="openAddEditModal(false, student)"
               ></button>
             </td>
           </tr>
@@ -243,7 +325,7 @@
             Showing <span>0</span> entries
           </p>
         </div>
-        <div
+        <div  *ngIf="filteredStudents.length != 0"
           class="right col-xl-9 d-flex justify-content-xl-end justify-content-center align-items-center overflow-x-auto"
         >
           <button

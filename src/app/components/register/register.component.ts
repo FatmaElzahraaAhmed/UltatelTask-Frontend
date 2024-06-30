@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { RouterModule } from '@angular/router';
+import { catchError, map } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -24,6 +26,7 @@ export class RegisterComponent {
   register = true;
   emailConfirmation = false;
   emailTaken = false;
+  emailErrorMessage = '';
   showConfirmPassword: boolean = false;
   passwordStrength = {
     class: '',
@@ -44,6 +47,10 @@ export class RegisterComponent {
       },
       { validator: this.passwordMatchValidator }
     );
+
+    this.registerForm.get('email')?.valueChanges.subscribe(() => {
+      this.emailErrorMessage = '';
+    });
   }
 
   togglePasswordVisibility() {
@@ -110,8 +117,8 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       const user = this.registerForm.value;
 
-      this.authService.register(user).subscribe(
-        (response) => {
+      this.authService.register(user).pipe(
+        map((response) => {
           if (
             response.message ==
             'Registration successful. Please check your email to confirm your account.'
@@ -120,27 +127,35 @@ export class RegisterComponent {
             this.emailConfirmation = true;
             this.emailToken = response.emailToken;
           }
-        },
-        (error) => {
-          if (error.error.message == 'Email is already taken') {
+        }),
+        catchError((error) => {
+          if (error.error.message == 'email must be an email') {
+            this.emailErrorMessage = 'Valid Email is required';
+            this.emailTaken = false;
+          } else if (error.error.message == 'Email is already taken') {
             this.emailTaken = true;
           } else {
             this.emailTaken = false;
           }
-        }
-      );
+          return throwError(() => new Error('test'));
+        })
+      ).subscribe();
     } else {
       this.markAllAsTouched(this.registerForm);
     }
   }
-
   resendConfirmationEmail() {
     const email = this.registerForm.get('email')?.value;
-    this.authService.resendConfirmationEmail(email).subscribe(
-      (response) => {
-        this.emailResent = true;
-      },
-      (error) => {}
-    );
+  
+    this.authService.resendConfirmationEmail(email).pipe(
+      catchError((error) => {
+        
+        console.error('Error resending confirmation email:', error);
+        return throwError(() => new Error('test'));
+      })
+    ).subscribe((response) => {
+      this.emailResent = true;
+    });
   }
+  
 }

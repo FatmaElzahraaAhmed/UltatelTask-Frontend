@@ -13,21 +13,41 @@
 <div class="modal-body w-50">
   <form>
     <div class="form-group mb-4">
-      <label for="name">Name</label>
+      <label for="firstName">First Name</label>
       <input
         type="text"
         class="form-control"
-        [(ngModel)]="student.name"
-        name="name"
-        id="name"
+        [(ngModel)]="student.firstName"
+        name="firstName"
+        id="firstName"
       />
       <div
         *ngIf="
-          studentForm.get('name')?.invalid && studentForm.get('name')?.touched
+          studentForm.get('firstName')?.invalid &&
+          studentForm.get('firstName')?.touched
         "
         class="text-danger"
       >
-        Name is required.
+        First Name is required.
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="lastName">Last Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="student.lastName"
+        name="lastName"
+        id="lastName"
+      />
+      <div
+        *ngIf="
+          studentForm.get('lastName')?.invalid &&
+          studentForm.get('lastName')?.touched
+        "
+        class="text-danger"
+      >
+        Last Name is required.
       </div>
     </div>
     <div class="form-group my-4">
@@ -62,7 +82,15 @@
         (clear)="clearGender()"
       >
       </ng-select>
-      <div *ngIf="studentForm.get('gender')?.invalid && studentForm.get('gender')?.touched" class="text-danger">Gender is required.</div>
+      <div
+        *ngIf="
+          studentForm.get('gender')?.invalid &&
+          studentForm.get('gender')?.touched
+        "
+        class="text-danger"
+      >
+        Gender is required.
+      </div>
     </div>
     <div class="form-group my-4">
       <label for="country">Country</label>
@@ -76,8 +104,15 @@
         (clear)="clearCountry()"
       >
       </ng-select>
-      <div *ngIf="studentForm.get('country')?.invalid && studentForm.get('country')?.touched" class="text-danger">Country is required.</div>
-
+      <div
+        *ngIf="
+          studentForm.get('country')?.invalid &&
+          studentForm.get('country')?.touched
+        "
+        class="text-danger"
+      >
+        Country is required.
+      </div>
     </div>
     <div class="form-group border-1">
       <label for="birthdate">Birthdate</label>
@@ -91,8 +126,8 @@
               [(ngModel)]="student.dateOfBirth"
               ngbDatepicker
               #d="ngbDatepicker"
-              [maxDate]="{ year: 2010, month: 12, day: 31 }"
-              [minDate]="{ year: 2000, month: 1, day: 1 }"
+              [maxDate]="maxDate"
+              [minDate]="minDate"
             />
             <button
               class="btn btn-outline-secondary"
@@ -106,7 +141,15 @@
       </form>
     </div>
   </form>
-  <div *ngIf="studentForm.get('birthdate')?.invalid && studentForm.get('birthdate')?.touched" class="text-danger">Birthdate is required.</div>
+  <div
+    *ngIf="
+      studentForm.get('birthdate')?.invalid &&
+      studentForm.get('birthdate')?.touched
+    "
+    class="text-danger"
+  >
+    Birthdate is required.
+  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-success px-5" (click)="save()">

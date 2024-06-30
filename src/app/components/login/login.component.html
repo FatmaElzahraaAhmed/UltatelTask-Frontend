@@ -22,7 +22,16 @@
               />
               <div
                 *ngIf="
-                  loginForm.get('email')?.invalid &&
+                  loginForm.get('email')?.errors?.['required'] &&
+                  loginForm.get('email')?.touched
+                "
+                class="text-danger"
+              >
+                Email is required
+              </div>
+              <div
+                *ngIf="
+                  loginForm.get('email')?.errors?.['email'] &&
                   loginForm.get('email')?.touched
                 "
                 class="text-danger"
